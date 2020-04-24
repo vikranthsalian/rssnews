@@ -1,3 +1,47 @@
+
+
+<?php
+
+$type = $_GET['type'];
+
+
+
+function callAPI($method, $url, $data){
+   $curl = curl_init();
+   switch ($method){
+      default:
+         if ($data)
+            $url = sprintf("%s?%s", $url, http_build_query($data));
+   }
+   // OPTIONS:
+   curl_setopt($curl, CURLOPT_URL, $url);
+   curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      'apiKey: e098ab7785d64b49a750d0cf92834dcb',
+      'Content-Type: application/json',
+   ));
+   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+   // EXECUTE:
+   $result = curl_exec($curl);
+   if(!$result){
+	   die("Connection Failure");
+	   }
+   curl_close($curl);
+   return $result;
+}
+$get_data = callAPI('GET', 'http://newsapi.org/v2/top-headlines?category='.$type.'&country=in&apiKey=e098ab7785d64b49a750d0cf92834dcb', false);
+$response = json_decode($get_data, true);
+$status = $response['status'];
+//$code = $response['code'];
+//$message = $response['message'];
+//echo $message;
+$totalResults = $response['totalResults'];
+$data = $response['articles'];
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en-US">
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -59,28 +103,37 @@
  </div>
  <div class="site-navigation nav-gradient header-two-style">
  <div class="nav-wrapper "><div class="container nav-wrapp"><div class="kyrill-responsive-menu"></div><div class="mainmenu">
- <div class="menu-main-nav-container"><ul id="primary-menu" class="menu">
- <li id="menu-item-194" class="menu-item menu-item-type-custom menu-item-object-custom  menu-item-has-children menu-item-194">
- <a href="#">Home</a></li>
+ <div class="menu-main-nav-container">
+ <ul id="primary-menu" class="menu">
  <li id="menu-item-195" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-195">
- <a href="category/fashion/index.html">Fashion</a></li>
+ <a href="index.php">Home</a></li>
+ <li id="menu-item-195" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-195">
+ <a href="category.php?type=health">Health</a></li>
+  <li id="menu-item-195" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-195">
+ <a href="category.php?type=politics">Politics</a></li>
+ <li id="menu-item-195" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-195">
+ <a href="category.php?type=science">Science</a></li>
  <li id="menu-item-196" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-196">
- <a href="category/lifestyle/index.html">Lifestyle</a></li>
+ <a href="category.php?type=general">General</a></li>
  <li id="menu-item-197" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-197">
- <a href="category/sports/index.html">Sports</a></li>
+ <a href="category.php?type=sports">Sports</a></li>
  <li id="menu-item-198" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-198">
- <a href="category/tech/index.html">Tech</a></li>
+ <a href="category.php?type=technology">Technology</a></li>
  <li id="menu-item-199" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-199">
- <a href="category/video/index.html">Media</a></li>
+ <a href="category.php?type=business">Business</a></li>
  <li id="menu-item-474" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-474">
- <a href="category/travel/index.html">Travel</a></li>
+ <a href="category.php?type=travel">Travel</a></li>
  <li id="menu-item-200" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-200">
 
- </li></ul></div></div>
+ </li>
+ </ul>
+ </div></div>
 </div></div></div>
 </header>
- <div class="theme-page-content"><div data-elementor-type="wp-page" data-elementor-id="648" class="elementor elementor-648" data-elementor-settings="[]">
- <div class="elementor-inner"><div class="elementor-section-wrap">
+ <div class="theme-page-content">
+ <div data-elementor-type="wp-page" data-elementor-id="648" class="elementor elementor-648" data-elementor-settings="[]">
+ <div class="elementor-inner">
+ <div class="elementor-section-wrap">
 <!-- <section class="elementor-element elementor-element-1d12fb5 elementor-section-boxed elementor-section-height-default elementor-section-height-default elementor-section elementor-top-section" data-id="1d12fb5" data-element_type="section"><div class="elementor-container elementor-column-gap-default">
  <div class="elementor-row"><div class="elementor-element elementor-element-11866c7 elementor-column elementor-col-33 elementor-top-column" data-id="11866c7" data-element_type="column"><div class="elementor-column-wrap  elementor-element-populated">
  <div class="elementor-widget-wrap"><div class="elementor-element elementor-element-9528933 mb-last elementor-widget elementor-widget-newszone-post-grid" data-id="9528933" data-element_type="widget" data-widget_type="newszone-post-grid.default">
@@ -110,68 +163,169 @@
  <div class="elementor-column-wrap  elementor-element-populated">
  <div class="elementor-widget-wrap">
  <div class="elementor-element elementor-element-6ae9477 title-sec-uniq elementor-widget elementor-widget-newszone-post-tab" data-id="6ae9477" data-element_type="widget" data-widget_type="newszone-post-tab.default">
- <div class="elementor-widget-container"><div class="featured-tab-item"><div class="post-block-element featured-tab">
+ <div class="elementor-widget-container">
+ 
+ <div class="featured-tab-item"><div class="post-block-element featured-tab">
  <div class="section-heading heading-style3">
  <h2 class="block-title"> Featured News</h2>
  </div>
  <ul class="nav nav-tabs" role="tablist">
  <li class="nav-item"><a class="nav-link active" href="#6ae947792a1ae5" data-toggle="tab">
  <span class="tab-head">
- <span class="tab-text-title">All</span>
+ <span class="tab-text-title">Positive</span>
  </span></a>
  </li>
  <li class="nav-item">
  <a class="nav-link" href="#6ae9477eb58f73" data-toggle="tab"><span class="tab-head">
- <span class="tab-text-title">Newest</span></span></a></li><li class="nav-item">
- <a class="nav-link" href="#6ae9477cbdd305" data-toggle="tab"><span class="tab-head"><span class="tab-text-title">Popular</span></span>
- </a></li><li class="nav-item"><a class="nav-link" href="#6ae947716f6948" data-toggle="tab"><span class="tab-head">
- <span class="tab-text-title">Trending</span></span></a></li></ul><div class="tab-content"><div role="tabpanel" class="tab-pane fade active show" id="6ae947792a1ae5">
+ <span class="tab-text-title">Negative</span></span></a></li><li class="nav-item">
+ <a class="nav-link" href="#6ae9477cbdd305" data-toggle="tab"><span class="tab-head">
+ <span class="tab-text-title">Neutral</span></span>
+ </a></li>
+ 
+ </ul>
+ <div class="tab-content">
+ 
+ 
+ <div role="tabpanel" class="tab-pane fade active show" id="6ae947792a1ae5">
  <div class="block-tab-item">
- <div class="row"><div class="col-md-6 col-sm-12">
- <div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url(wp-content/uploads/2020/03/dancing-woman-770x470.jpg)">
+ <div class="row">
+ 
+ <?php
+ 
+ 
+ 
+ ?>
+ 
+ 
+ 
+ <div class="col-md-6 col-sm-12">
+ <div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url( <?php echo $data[0]['urlToImage'];  ?>)">
  <div class="featured-post">
  <a href="#" class="image-link">&nbsp;</a>
  <div class="overlay-post-content">
  <div class="post-content">
  <div class="grid-category">
- <a class="post-cat" href="category/fashion/index.html" style="background-color:#ff3a3a;color:#ffffff"> Fashion </a>
+ <a class="post-cat" href="" style="background-color:#ff3a3a;color:#ffffff">  <?php echo $type;  ?> </a>
  </div>
  <h2 class="post-title title-lg"> 
- <a href="6-ways-to-instantly-improve-your-ui-design/index.html" rel="bookmark" title="The loss is not all that surprising">The loss is not all that surprising</a>
+ <a href="" rel="bookmark" title=<?php echo $data[0]['title'];  ?>><?php echo $data[0]['title'];  ?> </a>
  </h2><ul class="post-meta-info ts-avatar-container ">
  <li class="ts-author-avatar">
  <img alt='' src='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=45&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=90&#038;d=mm&#038;r=g 2x' class='avatar avatar-45 photo' height='45' width='45' />
- <a href="author/admin/index.html">Millie</a></li><li class="post-date"> <i class="fa fa-clock-o">
- </i> Mar 28, 2020</li>
- </ul></div></div></div></div></div><div class="col-md-6 col-sm-12 second">
- <div class="post-block-list list-post-block"><ul class="list-post">
- <li>
- <div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/fashion4.jpg)">
+ <a href=""><?php echo $data[0]['author'];  ?></a></li>
+ 
+ <li class="post-date"> <i class="fa fa-clock-o"></i> <?php echo $data[0]['publishedAt'];  ?></li>
+ </ul>
  </div>
- <div class="post-content media-body"><h4 class="post-title title-small"><a href="return-of-the-bench-seat-concept-show-space-big-for-sofas/index.html" rel="bookmark" title="Return of the bench seat Concept show space big for sofas">Return of the bench seat Concept show space</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o">
- </i> Mar 28, 2020</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="col-md-6 col-sm-12 second">
+ <div class="post-block-list list-post-block">
+ <ul class="list-post">
+ <li>
+ <div class="post-block-style media"><div class="post-thumb" style="background-image:url(<?php echo $data[1]['urlToImage'];  ?>)">
+ </div>
+ <div class="post-content media-body"><h4 class="post-title title-small"><a href="" rel="bookmark" title=<?php echo $data[1]['title'];  ?>><?php echo $data[1]['title'];  ?></a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o">
+ </i> <?php echo $data[1]['publishedAt'];  ?></span>
  </div>
  </div>
  </div>
  </li>
  <li>
  <div class="post-block-style media">
- <div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/fashion.jpg)">
+ <div class="post-thumb" style="background-image:url(<?php echo $data[2]['urlToImage'];  ?>)">
  </div>
  <div class="post-content media-body">
- <h4 class="post-title title-small"><a href="santino-loganne-legan-an-year-old-resident/index.html" rel="bookmark" title="Santino loganne legan an year old resident">Santino loganne legan an year old resident</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/lifestyle14.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="disabled-people-must-be-front-and-centre-on-tv/index.html" rel="bookmark" title="Disabled People Must Be Front And Centre On TV">Disabled People Must Be Front And Centre On</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li></ul></div></div></div></div></div><div role="tabpanel" class="tab-pane fade" id="6ae9477eb58f73"><div class="block-tab-item"><div class="row"><div class="col-md-6 col-sm-12"><div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url(wp-content/uploads/2020/03/dancing-woman-770x470.jpg)"><div class="featured-post"> <a href="#" class="image-link">&nbsp;</a><div class="overlay-post-content"><div class="post-content"><div class="grid-category"> <a 
- class="post-cat" 
- href="category/fashion/index.html"
- style="background-color:#ff3a3a;color:#ffffff"
- > Fashion </a></div><h2 class="post-title title-lg"> <a href="6-ways-to-instantly-improve-your-ui-design/index.html" rel="bookmark" title="The loss is not all that surprising">The loss is not all that surprising</a></h2><ul class="post-meta-info ts-avatar-container "><li class="ts-author-avatar"><img alt='' src='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=45&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=90&#038;d=mm&#038;r=g 2x' class='avatar avatar-45 photo' height='45' width='45' /><a href="author/admin/index.html">Millie</a></li><li class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</li></ul></div></div></div></div></div><div class="col-md-6 col-sm-12 second"><div class="post-block-list list-post-block"><ul class="list-post"><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/fashion4.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="return-of-the-bench-seat-concept-show-space-big-for-sofas/index.html" rel="bookmark" title="Return of the bench seat Concept show space big for sofas">Return of the bench seat Concept show space</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/travel05.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="the-loss-is-not-all-that-surprising-given/index.html" rel="bookmark" title="The loss is not all that surprising given">The loss is not all that surprising given</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/travel04.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="early-tourists-choices-to-the-sea-of-maldives-in-fancy/index.html" rel="bookmark" title="Early tourists choices to the sea of Maldives in fancy">Early tourists choices to the sea of Maldives</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li></ul></div></div></div></div></div><div role="tabpanel" class="tab-pane fade" id="6ae9477cbdd305"><div class="block-tab-item"><div class="row"><div class="col-md-6 col-sm-12"><div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url(wp-content/uploads/2020/03/sport01-770x470.jpg)"><div class="featured-post"> <a href="#" class="image-link">&nbsp;</a><div class="overlay-post-content"><div class="post-content"><div class="grid-category"> <a 
+ <h4 class="post-title title-small"><a href="santino-loganne-legan-an-year-old-resident/index.html" rel="bookmark" title=<?php echo $data[2]['title'];  ?>><?php echo $data[2]['title'];  ?></a></h4>
+ <div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o">
+ </i> <?php echo $data[2]['publishedAt'];  ?></span></div></div></div>
+ </li>
+ <li>
+ <div class="post-block-style media">
+ <div class="post-thumb" style="background-image:url(<?php echo $data[3]['urlToImage'];  ?>)"></div>
+ <div class="post-content media-body"><h4 class="post-title title-small"><a href="" rel="bookmark" title=<?php echo $data[3]['title'];  ?>><?php echo $data[3]['title'];  ?></a></h4>
+ <div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o">
+ </i> <?php echo $data[3]['publishedAt'];  ?></span></div></div></div>
+ </li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+ <div role="tabpanel" class="tab-pane fade" id="6ae9477eb58f73"> 
+ <div class="block-tab-item">
+ <div class="row">
+ <div class="col-md-6 col-sm-12">
+ <div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url(wp-content/uploads/2020/03/dancing-woman-770x470.jpg)">
+ <div class="featured-post">
+ <a href="#" class="image-link">&nbsp;</a>
+ <div class="overlay-post-content">
+ <div class="post-content"><div class="grid-category">
+ <a class="post-cat" href="category/fashion/index.html" style="background-color:#ff3a3a;color:#ffffff"> Fashion </a>
+ </div>
+ <h2 class="post-title title-lg"> <a href="6-ways-to-instantly-improve-your-ui-design/index.html" rel="bookmark" title="The loss is not all that surprising">The loss is not all that surprising-Neutral</a></h2><ul class="post-meta-info ts-avatar-container ">
+ <li class="ts-author-avatar"><img alt='' src='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=45&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=90&#038;d=mm&#038;r=g 2x' class='avatar avatar-45 photo' height='45' width='45' />
+ <a href="author/admin/index.html">Millie</a></li><li class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</li></ul></div></div></div></div>
+ </div>
+ 
+ 
+ 
+ <div class="col-md-6 col-sm-12 second">
+ <div class="post-block-list list-post-block">
+ 
+ 
+ 
+ <ul class="list-post">
+ 
+ <li>
+ <div class="post-block-style media">
+ <div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/fashion4.jpg)"></div>
+ <div class="post-content media-body"><h4 class="post-title title-small">
+ <a href="return-of-the-bench-seat-concept-show-space-big-for-sofas/index.html" rel="bookmark" title="Return of the bench seat Concept show space big for sofas">Return of the bench seat Concept show space</a></h4>
+ <div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div>
+ </li>
+ <li>
+ <div class="post-block-style media">
+ <div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/travel05.jpg)"></div>
+ <div class="post-content media-body">
+ <h4 class="post-title title-small">
+ <a href="the-loss-is-not-all-that-surprising-given/index.html" rel="bookmark" title="The loss is not all that surprising given">The loss is not all that surprising given</a></h4>
+ <div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div>
+ </li>
+ <li>
+ <div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/travel04.jpg)"></div>
+ <div class="post-content media-body"><h4 class="post-title title-small">
+ <a href="early-tourists-choices-to-the-sea-of-maldives-in-fancy/index.html" rel="bookmark" title="Early tourists choices to the sea of Maldives in fancy">Early tourists choices to the sea of Maldives</a></h4>
+ <div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ </div></div></div></div>
+ </div>
+ 
+ 
+ <div role="tabpanel" class="tab-pane fade" id="6ae9477cbdd305"><div class="block-tab-item"><div class="row"><div class="col-md-6 col-sm-12"><div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url(wp-content/uploads/2020/03/sport01-770x470.jpg)">
+ <div class="featured-post"> <a href="#" class="image-link">&nbsp;</a><div class="overlay-post-content"><div class="post-content"><div class="grid-category"> <a 
  class="post-cat" 
  href="category/sports/index.html"
  style="background-color:#ff9900;color:#ffffff"
- > Sports </a></div><h2 class="post-title title-lg"> <a href="brazil-secretart-thiago-wary-lionel-mesi/index.html" rel="bookmark" title="Brazil Secretart Thiago wary Lionel Mesi">Brazil Secretart Thiago wary Lionel Mesi</a></h2><ul class="post-meta-info ts-avatar-container "><li class="ts-author-avatar"><img alt='' src='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=45&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=90&#038;d=mm&#038;r=g 2x' class='avatar avatar-45 photo' height='45' width='45' /><a href="author/admin/index.html">Millie</a></li><li class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</li></ul></div></div></div></div></div><div class="col-md-6 col-sm-12 second"><div class="post-block-list list-post-block"><ul class="list-post"><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/sport03.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="venezuela-elan-govt-and-opposit-the-property-collect-negote/index.html" rel="bookmark" title="Venezuela elan govt and opposit the property collect negote">Venezuela elan govt and opposit the property collect</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/health05.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="california-compound-she-is-trying-to-sell-a-gat-ed/index.html" rel="bookmark" title="California compound she is trying to sell a gat ed">California compound she is trying to sell a</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/court-ball.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="these-insects-carry-enough-bacteria-to-the-cause/index.html" rel="bookmark" title="These insects carry enough bacteria to the cause">These insects carry enough bacteria to the cause</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li></ul></div></div></div></div></div><div role="tabpanel" class="tab-pane fade" id="6ae947716f6948"><div class="block-tab-item"><div class="row"><div class="col-md-6 col-sm-12"><div class="slider-item tab-item-slide post-overlay tab-left-item" style="background-image:url(wp-content/uploads/2020/03/tech02-770x470.jpg)"><div class="featured-post"> <a href="#" class="image-link">&nbsp;</a><div class="overlay-post-content"><div class="post-content"><div class="grid-category"> <a 
- class="post-cat" 
- href="category/tech/index.html"
- style="background-color:#6360ff;color:#ffffff"
- > Tech </a></div><h2 class="post-title title-lg"> <a href="naturalistic-a-design-is-thriv-as-actual-nature-dies/index.html" rel="bookmark" title="Naturalistic a design is thriv as actual nature dies">Naturalistic a design is thriv as actual</a></h2><ul class="post-meta-info ts-avatar-container "><li class="ts-author-avatar"><img alt='' src='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=45&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=90&#038;d=mm&#038;r=g 2x' class='avatar avatar-45 photo' height='45' width='45' /><a href="author/admin/index.html">Millie</a></li><li class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</li></ul></div></div></div></div></div><div class="col-md-6 col-sm-12 second"><div class="post-block-list list-post-block"><ul class="list-post"><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/tech04.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="the-secret-to-moving-this-ancient-sphinx-screening/index.html" rel="bookmark" title="The secret to moving this ancient sphinx screening">The secret to moving this ancient sphinx screening</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/tech01.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="harbour-amid-a-slowen-down-in-singer-city-screening/index.html" rel="bookmark" title="Harbour amid a Slowen down in singer city screening">Harbour amid a Slowen down in singer city</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/travel05.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="the-loss-is-not-all-that-surprising-given/index.html" rel="bookmark" title="The loss is not all that surprising given">The loss is not all that surprising given</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li></ul></div></div></div></div></div></div></div></div></div></div></div></div></div>
+ > Sports </a></div><h2 class="post-title title-lg"> <a href="brazil-secretart-thiago-wary-lionel-mesi/index.html" rel="bookmark" title="Brazil Secretart Thiago wary Lionel Mesi">Brazil Secretart Thiago wary Lionel Mesi</a></h2><ul class="post-meta-info ts-avatar-container "><li class="ts-author-avatar"><img alt='' src='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=45&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/12a459f11056f1153abc52debb66a109?s=90&#038;d=mm&#038;r=g 2x' class='avatar avatar-45 photo' height='45' width='45' /><a href="author/admin/index.html">Millie</a></li><li class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</li></ul></div></div></div></div></div><div class="col-md-6 col-sm-12 second"><div class="post-block-list list-post-block"><ul class="list-post"><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/sport03.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="venezuela-elan-govt-and-opposit-the-property-collect-negote/index.html" rel="bookmark" title="Venezuela elan govt and opposit the property collect negote">Venezuela elan govt and opposit the property collect</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/health05.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="california-compound-she-is-trying-to-sell-a-gat-ed/index.html" rel="bookmark" title="California compound she is trying to sell a gat ed">California compound she is trying to sell a</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li><li><div class="post-block-style media"><div class="post-thumb" style="background-image:url(wp-content/uploads/2020/03/court-ball.jpg)"></div><div class="post-content media-body"><h4 class="post-title title-small"><a href="these-insects-carry-enough-bacteria-to-the-cause/index.html" rel="bookmark" title="These insects carry enough bacteria to the cause">These insects carry enough bacteria to the cause</a></h4><div class="post-meta"> <span class="post-date"> <i class="fa fa-clock-o"></i> Mar 28, 2020</span></div></div></div></li></ul></div></div></div></div>
+ </div>
+
+ </div></div></div>
+ 
+ </div>
+ 
+ </div></div></div></div>
 </div></div></section>
 
  </div></div></div></div>
